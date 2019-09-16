@@ -1,0 +1,30 @@
+/home/dito/desarrollo/tp-bash/ejercicio_3/ej3_daemon.sh: line 6: syntax error near unexpected token `done'
+/home/dito/desarrollo/tp-bash/ejercicio_3/ej3_daemon.sh: line 6: `done	'
+Haciendo backup de $1 en $2
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo1': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo2': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo3': Permission denied
+Haciendo backup de $1 en $2
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo1': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo2': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo3': Permission denied
+Haciendo backup de $1 en $2
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo1': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo2': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo3': Permission denied
+Haciendo backup de $1 en $2
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo1': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo2': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo3': Permission denied
+Haciendo backup de $1 en $2
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo1': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo2': Permission denied
+cp: cannot create regular file '/home/dito/desarrollo/tp-bash/ejercicio_3/dirbackup/dirPrueba/archivo3': Permission denied
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
+Haciendo backup de $1 en $2
