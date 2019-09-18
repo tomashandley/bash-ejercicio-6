@@ -96,9 +96,20 @@ fi
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
-	archivosConEspacio=();
+	archivosConEspacio=`find $miDirectorio -maxdepth 1 -type f -name '* *'`;
+
+	IFS=$'\n'
+	pos=0;
+	for i in ${archivosConEspacio[@]}
+	do
+		# echo "Nombre archivo: $i"
+		# $archivosAUnSoloEspacio[$pos]= `echo "$i" | tr -s ' '`
+	done
+
+
 	archivosModificados=`find $miDirectorio -maxdepth 1 -type f -name '* *'| wc -l `
 	echo "Archivos modificados: $archivosModificados"
+	
 }
 
 function reemplazoRecursivo() {
