@@ -1,39 +1,45 @@
 #!/bin/bash
 accion=$1
 #echo $$
-salir(){
-	echo 'se seguira ejecutando en segundo plano'
-	bg
-}
 
 ayuda(){
-	echo 'se usa asi .....'
+	echo 'Usage:'
+	echo 'ej3.sh <start|stop|count|clear|play>'
+	echo 'start dir_a_salvar dir_backup intervalo'
+	echo 'stop '
+	echo 'count'
+	echo 'clear cabt_backup'
 }
-
-#trap salir SIGINT
 
 PIDFILE=$(pwd)
 PIDFILE+="/daemonpid"
 touch ej3.log
 
+PATHTOBACKUPDIR="pathToBackUpDir";
+
 LOGFILE=$(pwd)
 LOGFILE+="/ej3.out"
-
 case $accion in 
 start)
 	if [ $# -lt 4 ]
-   then
+	then
     echo "Parametros insuficientes. Utilice -h o -help para conocer el funcionamiento"
     exit
 	fi
 	if [ -f $PIDFILE ]
 	then
-		if [ ps -pid $(<$PIDFILE)]
+		CANTPROCESOS=$( ps aux | grep ej3.daemon.sh -c ) 
+		if [ $CANTPROCESOS -gt  1 ] 
 		then
-		echo "No se puede ejecutar.Se esta ejecutando en este momento."
+			echo "No se puede ejecutar.Se esta ejecutando en este momento."
 		exit
 		fi	
 	fi
+	if [ ! -f pathToBackUpDir ] 
+	then
+		touch pathToBackUpDir 
+	fi
+	echo $3 >| pathToBackUpDir 
 	intervalo=$4
 	#directorio=$(pwd)
 	#directorio+="/ej3_daemon.sh"
@@ -43,16 +49,20 @@ start)
 	;;
 stop) 
 	#start-stop-daemon --stop --quiet --pidfile=$PIDFILE
-	if[ !f $PIDFILE ]
+	
+	if [ ! -f $PIDFILE ]
 	then
 		echo "No hay instancia ejecutando"
 		exit
 	fi
 	pidDaemon=$(<$PIDFILE)
 	kill $pidDaemon
-	exit;;
-count)echo 'count'	
-;;
+	exit
+	;;
+count)
+		DIRBACKUP=$(<$PATHTOBACKUPDIR) 
+		echo $(find $DIRBACKUP -type f | wc -l)
+		;;
 clear)
 		##if[ $# -gt 0 ]
 		##then
@@ -61,10 +71,20 @@ clear)
 		#	rm -rf '$*'
 		#fi;
 		;;
-play)echo 'play';;
--h|-help|-?) ayuda;;
+play)
+	if  $# -lt 3 ; then
+		echo "Parametros insuficientes. Utilice -h o -help para conocer el funcionamiento"
+		exit
+	fi
+	
+	cp -r $1 $2
+	;;
+-h|-help|-?) ayuda
+		;;
 *) echo 'Utilice -h ,-? o -help para conocer el funcionamiento';;
 esac
+
+
 
 
 
