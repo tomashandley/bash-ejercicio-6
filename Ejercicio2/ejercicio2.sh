@@ -101,9 +101,11 @@ function reemplazoNoRecursivo() {
 	IFS=$'\n'
 	pos=0;
 	for i in ${archivosConEspacio[@]}
-	do
-		# echo "Nombre archivo: $i"
-		# $archivosAUnSoloEspacio[$pos]= `echo "$i" | tr -s ' '`
+	do	
+		
+		newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')" 
+		#mv $i "${i/' '/_}"
+		mv $i $newfile
 	done
 
 
