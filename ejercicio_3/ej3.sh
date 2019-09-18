@@ -26,6 +26,10 @@ start)
     echo "Parametros insuficientes. Utilice -h o -help para conocer el funcionamiento"
     exit
 	fi
+	if [ ! -f ej3.out ]
+	then
+		touch ej3.out
+	fi
 	if [ -f $PIDFILE ]
 	then
 		CANTPROCESOS=$( ps aux | grep ej3.daemon.sh -c ) 
