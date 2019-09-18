@@ -96,20 +96,26 @@ fi
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
+	archivosModificados=`find $miDirectorio -maxdepth 1 -type f -name '* *'| wc -l `
+
 	archivosConEspacio=`find $miDirectorio -maxdepth 1 -type f -name '* *'`;
 
 	IFS=$'\n'
-	pos=0;
+	pos=1;
 	for i in ${archivosConEspacio[@]}
 	do	
-		
 		newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')" 
-		#mv $i "${i/' '/_}"
+		while [ -f $newfile ]
+		do
+			baseFileName="${newfile%.*}"
+			fileExtension="${newfile##*.}"
+			newfile="$baseFileName(copy$pos).$fileExtension"
+			(( pos++ ))
+		done
 		mv $i $newfile
+		pos=1;
 	done
 
-
-	archivosModificados=`find $miDirectorio -maxdepth 1 -type f -name '* *'| wc -l `
 	echo "Archivos modificados: $archivosModificados"
 	
 }
@@ -117,7 +123,26 @@ function reemplazoNoRecursivo() {
 function reemplazoRecursivo() {
 	echo "Estoy en la funcion recursiva."
 
-	archivosModificados=`find $miDirectorio -name '* *'| wc -l `
+	archivosModificados=`find $miDirectorio -type f -name '* *'| wc -l `
+	archivosConEspacio=`find $miDirectorio -type f -name '* *'`;
+
+	# IFS=$'\n'
+	# pos=1;
+	# for i in ${archivosConEspacio[@]}
+	# do	
+	# 	newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')" 
+	# 	while [ -f $newfile ]
+	# 	do
+	# 		baseFileName="${newfile%.*}"
+	# 		fileExtension="${newfile##*.}"
+	# 		newfile="$baseFileName(copy$pos).$fileExtension"
+	# 		(( pos++ ))
+	# 	done
+	# 	mv $i $newfile
+	# 	pos=1;
+	# done
+
+
 	echo "Archivos modificados= $archivosModificados"
 }
 
