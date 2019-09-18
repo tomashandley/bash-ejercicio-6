@@ -29,15 +29,10 @@ function ayuda(){
 	echo "	un *."
 	echo "	Además, es posible especificar el operador '-r'. De esta manera, se hará el reemplazo en todos"
 	echo "	los subdirectorios del directorio especificado."
+	echo "	De no ingresarse ningún directorio, el reemplazo se hará sobre el directorio actual."
 	echo "EXECUTION"
-	echo "  ./ejercicio6.sh /mi_directorio [-r]"
+	echo "  ./ejercicio6.sh [/mi_directorio] [-r]"
 }
-
-if [ $# == 0 ]; 
-then
-	echo "La cantidad de parametros ingresados es incorrecto."
-	exit
-fi
 
 if [ $# == 1 ]; 
 then
@@ -48,38 +43,78 @@ then
 	fi
 fi
 
+if [ $# == 1 ]
+then
+	if test "$1" = "-r"
+	then
+		echo "Si no se especifica un directorio, no se podrá aplicar la recursividad."
+		exit
+	else
+		if ! [ -d "$1" ]; 
+		then
+			echo "Por favor verique que el directorio existe y que esté correctamente el path"
+			exit;
+		fi
+	fi
+fi
+
+esRecursivo="false"
+
 if [ $# -gt 2 ]; 
 then
 	echo "La cantidad de parametros ingresados es incorrecto."
 	exit
 elif [ $# -eq 2 ]
 then
-	if [ "$2" != "-r" ]
+	if [ "$1" != "-r" ]
 	then
-		echo "El segundo parámetro no es válido."
-		exit
+		if [ "$2" != "-r" ]
+		then
+			echo "Uno de los dos parámetros no es correcto. Revice la ayuda."
+			exit
+		fi
+		
+		if ! [ -d "$1" ]; 
+		then
+			echo "Por favor verique que el directorio existe y que esté correctamente el path"
+			exit;
+		else
+		esRecursivo="true"
+		miDirectorio="$1"
+		fi
+	else
+		if ! [ -d "$2" ]; 
+		then
+			echo "Por favor verique que el directorio existe y que esté correctamente el path"
+			exit;
+		else
+		esRecursivo="true"
+		miDirectorio="$2"
+		fi
 	fi
-fi
-
-if ! [ -d "$1" ]; 
-then
-	echo "Por favor verique que el directorio existe y que esté correctamente el path"
-	exit;
 fi
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
-
-	
-
+	archivosConEspacio=();
+	archivosModificados=`find $miDirectorio -maxdepth 1 -type f -name '* *'| wc -l `
+	echo "Archivos modificados: $archivosModificados"
 }
 
 function reemplazoRecursivo() {
 	echo "Estoy en la funcion recursiva."
+
+	archivosModificados=`find $miDirectorio -name '* *'| wc -l `
+	echo "Archivos modificados= $archivosModificados"
 }
-	if [ "$2" == "-r" ]
+
+function init() {
+	if [ $esRecursivo == "true" ]
 	then
 		reemplazoRecursivo
 	else
 		reemplazoNoRecursivo
 	fi
+}
+	
+init
