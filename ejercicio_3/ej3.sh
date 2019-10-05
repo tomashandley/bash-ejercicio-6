@@ -1,13 +1,30 @@
 #!/bin/bash
+
+#################################################
+#			Sistemas Operativos		            #       
+#		Trabajo Práctico 1 - Ejercicio 3	    #
+#		Nombre del Script: ej3.sh		        #
+#							                    #
+#				Integrantes:		            #
+#         Di Tommaso, Giuliano     38695645		#
+#         Handley, Tomas           39210894		#
+#         Imperatori, Nicolas      38622912		#
+#							                    #
+#		Instancia de Entrega: Entrega		    #
+#							                    #
+#################################################
+
+
 accion=$1
 
 ayuda(){
-	echo 'Usage:'
+	echo 'Usage :'
 	echo 'ej3.sh <start|stop|count|clear|play>'
-	echo 'start dir_a_salvar dir_backup intervalo'
-	echo 'stop '
-	echo 'count'
-	echo 'clear cabt_backup'
+	echo 'start dir_a_salvar dir_backup intervalo ----- hace un backup del dir_a_salvar en dir_backup cada intervalo segundos'
+	echo 'stop  ------  Detiene la ejecucion del backup'
+	echo 'count ------  Cuenta la cantidad de backups que hay realizados'
+	echo 'clear cantidad_backup ------ Mantiane la cantidad de backups mas recientes especificados por parametro. Si no se le pasa parametro borra todo'
+	echo 'play  ------ Realiza un backup en ese momento'
 }
 
 PIDFILE=$(pwd)
@@ -88,18 +105,18 @@ stop)
 	;;
 count)
 	DIRBACKUP=$(<$PATHTOBACKUPDIR) 
-	echo $(find $DIRBACKUP -type f | wc -l)
+	echo $(find "$DIRBACKUP" -type f | wc -l)
 	;;
 clear)
 	DIRBACKUP=$(<$PATHTOBACKUPDIR)
 	if [ $# -gt 1 ]
 	then
 		CANTIDADMANTENER="$2"
-		cd $DIRBACKUP
+		cd "$DIRBACKUP"
 		ls -t | sed -e '1,'"$CANTIDADMANTENER"'d' | xargs -d '\n' rm 
 	else
 		DIRBACKUP=$(<$PATHTOBACKUPDIR)
-		rm $DIRBACKUP/*.tar.gz
+		rm "$DIRBACKUP"/*.tar.gz
 	fi
 	;;
 play)

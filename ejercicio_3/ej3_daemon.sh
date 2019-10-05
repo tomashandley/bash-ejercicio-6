@@ -4,10 +4,14 @@ do_backup(){
 	hora=$(date +%Y%m%d%H%M%S)
 	PATHBACKUP=$(<pathToBackUpDir) 
 	PATHAGUARDAR=$(<pathDirGuardar)
-	echo  " $hora : Haciendo backup de $PATHAGUARDAR en $PATHBACKUP"
+	echo  "$hora : Haciendo backup de $PATHAGUARDAR en $PATHBACKUP"
 	FILENAME=backup_$hora.tar.gz
-	tar -czvf $FILENAME $PATHAGUARDAR
-	mv $FILENAME $PATHBACKUP
+	tar -czvf "$FILENAME" "$PATHAGUARDAR"
+	if [ ! -d  "$PATHBACKUP" ]
+	then
+		mkdir "$PATHBACKUP"	
+	fi		
+	mv "$FILENAME" "$PATHBACKUP"
 }
 
 
