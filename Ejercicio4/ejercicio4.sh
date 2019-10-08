@@ -9,7 +9,7 @@
 #         Handley, Tomas           39210894		#
 #         Imperatori, Nicolas      38622912		#
 #							                    #
-#		Instancia de Entrega: Entrega		    #
+#		Instancia de Entrega: Rentrega 1	    #
 #							                    #
 #################################################
 
@@ -49,9 +49,14 @@ fi
 ruta=$(realpath "$1")
 extension=$2
 cantidadArchivos=$(find "$ruta" -type f -name "*$extension" | wc -l)
-echo "Cantida de archivos analizados: $cantidadArchivos"
+echo "Cantidad de archivos analizados: $cantidadArchivos"
 
-totalLineas=$(find "$ruta" -type f -name "*$extension" -exec wc -l {} + | tail -1 | awk {'print $1'})
+total=0
+totalLineas=$(find "$ruta" -type f -name "*$extension" | (while read archivo; do
+    cant=$(awk -f lineasTotales.awk "$archivo")
+    total=$((total+cant))
+done 
+echo $total))
 echo "Total de lineas de los archivos analizados: $totalLineas"
 
 cantLineasCodigo=0

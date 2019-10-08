@@ -11,7 +11,8 @@ public class Deposito {
 
     //Constructor sin parámetros auxiliar
     public Deposito () { //Lo que hace es llamar al constructor con parámetros pasándole valores vacíos
-        this(0,0,"");            } //Cierre del constructor
+        this(0,0,"");
+    } //Cierre del constructor
 
 
     //Constructor de la clase que pide los parámetros necesarios
@@ -25,7 +26,8 @@ public class Deposito {
             altura = 5;
             idDeposito = "000";
             System.out.println ("Creado depósito con valores por defecto diametro 10 metros altura 5 metros id 000" );
-        }   } //Cierre del constructor
+        }
+    } //Cierre del constructor
 
     public void setValoresDeposito (String valor_idDeposito, float valor_diametro, float valor_altura) {
         idDeposito = valor_idDeposito;
@@ -38,7 +40,8 @@ public class Deposito {
             idDeposito = "";
             diametro = 0;
             altura = 0;
-        }     } //Cierre del método
+        }
+    } //Cierre del método
 
     public float getDiametro () { return diametro; } //Método de acceso
     public float getAltura () { return altura; } //Método de acceso
