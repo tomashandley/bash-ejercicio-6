@@ -54,6 +54,8 @@ then
 		then
 			echo "Por favor verique que el directorio existe y que esté correctamente el path"
 			exit;
+		else
+			miDirectorio="$1"
 		fi
 	fi
 fi
@@ -96,9 +98,9 @@ fi
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
-	archivosModificados=`find $miDirectorio -maxdepth 1 -type f -name '* *'| wc -l `
+	archivosModificados=`find "$miDirectorio" -maxdepth 1 -type f -name '* *'| wc -l `
 
-	archivosConEspacio=`find $miDirectorio -maxdepth 1 -type f -name '* *'`;
+	archivosConEspacio=`find "$miDirectorio" -maxdepth 1 -type f -name '* *'`;
 
 	IFS=$'\n'
 	pos=1;
@@ -108,11 +110,14 @@ function reemplazoNoRecursivo() {
 		while [ -f $newfile ]
 		do
 			baseFileName="${newfile%.*}"
+			echo "Base File Name: "$baseFileName""
 			fileExtension="${newfile##*.}"
+			echo "File Extension: "$fileExtension""
 			newfile="$baseFileName(copy$pos).$fileExtension"
+			echo "New File: "$newFile""
 			(( pos++ ))
 		done
-		mv $i $newfile
+		mv "$i" "$newfile"
 		pos=1;
 	done
 
