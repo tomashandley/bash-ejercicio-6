@@ -2,7 +2,7 @@ BEGIN{cantCodigo=0;
 aperturaComentario=0;
 cierreComentario=0;
 }
-($1 !~ "//" && $1 !~ "\/\*" && $NF !~ "\*\/" && $0 != "" && aperturaComentario == 0 && NF){
+(($1 !~ "//" || index($1,"//") > 1) && ($1 !~ "\/\*" || index($1,"/*") > 1) && $0 != "" && aperturaComentario == 0 && NF){
     cantCodigo++;
 }
 $0 ~ "\/\*" && $0 !~ "\*\/"{
