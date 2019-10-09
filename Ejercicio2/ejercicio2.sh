@@ -111,9 +111,9 @@ function splitPath() {
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
-	archivosModificados=`find "$1" -maxdepth 1 -type f -name '* *'| wc -l `
+	archivosModificados=`find "$miDirectorio" -maxdepth 1 -type f -name '* *'| wc -l `
 
-	archivosConEspacio=`find "$1" -maxdepth 1 -type f -name '* *'`;
+	archivosConEspacio=`find "$miDirectorio" -maxdepth 1 -type f -name '* *'`;
 
 	IFS=$'\n'
 	pos=1;
@@ -121,13 +121,11 @@ function reemplazoNoRecursivo() {
 	do	
 		# Hago split del PATH por si algun directorio tiene espacios
 		splitPath "$i"
+		# Reemplazo los espacios, solo del archivo
 		newfile="$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g')"
-		array[-1]=$newfile;
-		newPath="";
-		for element in ${array[@]}
-		do
-			newPath="$newPath/$element"
-		done
+		replacedValue=${array[-1]}
+		newPath=$(echo $i | sed -e "s/$replacedValue/$newfile/g")
+		# Chequeo que ese archivo no exista. Si existe, le agrego al nombre (copyN), N numero de copia.
 		while [ -f "$newPath" ]
 		do
 			baseFileName="${newPath%.*}"
@@ -135,6 +133,7 @@ function reemplazoNoRecursivo() {
 			newPath="$baseFileName(copy$pos).$fileExtension"
 			(( pos++ ))
 		done
+		# Hago el renombre del archivo, de espacios a _
 		mv "$i" "$newPath"
 		pos=1;
 	done
@@ -147,36 +146,39 @@ function reemplazoRecursivo() {
 	archivosModificados=`find "$miDirectorio" -type f -name '* *'| wc -l `
 
 	IFS=$'\n'
+	# Obtengo los directorios de $miDirectorio (incluido este) y los almaceno en un array
 	arrayR=`find "$miDirectorio" -type d -print`
 
+	# Itero el array y aplico la misma funcionanlidad que en la funcion no recursiva
 	for element in ${arrayR[@]}
-		do
-			archivosConEspacio=`find "$element" -maxdepth 1 -type f -name '* *'`;
+	do
+		archivosConEspacio=`find "$element" -maxdepth 1 -type f -name '* *'`;
 
-			IFS=$'\n'
-			pos=1;
-			for i in ${archivosConEspacio[@]}
-			do	
-				# Hago split del PATH por si algun directorio tiene espacios
-				splitPath "$i"
-				newfile="$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g')"
-				array[-1]=$newfile;
-				newPath="";
-				for element in ${array[@]}
-				do
-					newPath="$newPath/$element"
-				done
-				while [ -f "$newPath" ]
-				do
-					baseFileName="${newPath%.*}"
-					fileExtension="${newPath##*.}"
-					newPath="$baseFileName(copy$pos).$fileExtension"
-					(( pos++ ))
-				done
-				mv "$i" "$newPath"
-				pos=1;
+		IFS=$'\n'
+		pos=1;
+		for i in ${archivosConEspacio[@]}
+		do	
+			# Hago split del PATH por si algun directorio tiene espacios
+			splitPath "$i"
+			# Reemplazo los espacios, solo del archivo
+			newfile="$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g')"
+			# Agarro el archivo con el espacio
+			replacedValue=${array[-1]}
+			# Reemplazo en el path el archivo con espacios con el nuevo con "_"
+			newPath=$(echo $i | sed -e "s/$replacedValue/$newfile/g")
+			# Chequeo que ese archivo no exista. Si existe, le agrego al nombre (copyN), N numero de copia.
+			while [ -f "$newPath" ]
+			do
+				baseFileName="${newPath%.*}"
+				fileExtension="${newPath##*.}"
+				newPath="$baseFileName(copy$pos).$fileExtension"
+				(( pos++ ))
 			done
+			# Hago el renombre del archivo, de espacios a _
+			mv "$i" "$newPath"
+			pos=1;
 		done
+	done
 
 	echo "Archivos modificados: $archivosModificados"
 }
@@ -186,7 +188,7 @@ function init() {
 	then
 		reemplazoRecursivo 
 	else
-		reemplazoNoRecursivo "$miDirectorio"
+		reemplazoNoRecursivo
 	fi
 }
 	
