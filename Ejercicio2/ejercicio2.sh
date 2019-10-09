@@ -96,11 +96,16 @@ then
 	fi
 fi
 
+barra="/";
+
 function splitPath() {
 	IFS='/' read -r -a array <<< "$1"
+	# IFS=$'\n'
+	# for element in ${array[@]}
+	# do
+	# 	echo "Elementos de array: $element"
+	# done
 }
-
-barra="/";
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
@@ -112,11 +117,13 @@ function reemplazoNoRecursivo() {
 	pos=1;
 	for i in ${archivosConEspacio[@]}
 	do	
-		# Hago split del PATH por si el mismo tiene espacios en directorios
+		# Hago split del PATH por si algun directorio tiene espacios
 		splitPath "$i"
-		# newfile="$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g')"
-		"$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g' | $newFile)"
-		while [ -f $newfile ]
+		echo "Ultimo elemento del array: ${array[-1]}"
+		newfile="$(echo "${array[-1]}" | sed -r 's/[[:space:]]+/_/g')"
+		# newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')"
+		echo "NEW FILE: $newfile"
+		while [ -f "$newfile" ]
 		do
 			baseFileName="${newfile%.*}"
 			echo "Base File Name: "$baseFileName""
@@ -126,7 +133,9 @@ function reemplazoNoRecursivo() {
 			echo "New File: "$newFile""
 			(( pos++ ))
 		done
-		array[-1]="$newFile";
+		array[$ultimo]=$newfile;
+		echo "New File: $newfile"
+		echo "${array[-1]}"
 		newPath="";
 		for element in "${array[@]}"
 		do
