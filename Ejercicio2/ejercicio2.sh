@@ -118,7 +118,10 @@ function reemplazoNoRecursivo() {
 	for i in ${archivosConEspacio[@]}
 	do	
 		# Hago split del PATH por si algun directorio tiene espacios
+		echo "Archivos con espacios: $i"
 		newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')"
+		echo "Newfile: $newfile"
+		echo "Archivo con espacios desp del sed: $i"
 		while [ -f "$newfile" ]
 		do
 			baseFileName="${newfile%.*}"
