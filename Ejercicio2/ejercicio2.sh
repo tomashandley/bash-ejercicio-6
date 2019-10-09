@@ -43,6 +43,12 @@ then
 	fi
 fi
 
+if [ $# == 0 ]
+then
+	echo "Debe ingresar un directorio";
+	exit;
+fi
+
 if [ $# == 1 ]
 then
 	if test "$1" = "-r"
@@ -98,38 +104,38 @@ fi
 
 # barra="/";
 
-# function splitPath() {
-	# IFS='/' read -r -a array <<< "$1"
-	# IFS=$'\n'
-	# for element in ${array[@]}
-	# do
-	# 	echo "Elementos de array: $element"
-	# done
-# }
+function splitPath() {
+	IFS='/' read -r -a array <<< "$1"
+	IFS=$'\n'
+}
 
 function reemplazoNoRecursivo() {
 	echo "Estoy en la funcion NO recursiva."
-	archivosModificados=`find "$miDirectorio" -maxdepth 1 -type f -name '* *'| wc -l `
+	archivosModificados=`find "$1" -maxdepth 1 -type f -name '* *'| wc -l `
 
-	archivosConEspacio=`find "$miDirectorio" -maxdepth 1 -type f -name '* *'`;
+	archivosConEspacio=`find "$1" -maxdepth 1 -type f -name '* *'`;
 
 	IFS=$'\n'
 	pos=1;
 	for i in ${archivosConEspacio[@]}
 	do	
 		# Hago split del PATH por si algun directorio tiene espacios
-		echo "Archivos con espacios: $i"
-		newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')"
-		echo "Newfile: $newfile"
-		echo "Archivo con espacios desp del sed: $i"
-		while [ -f "$newfile" ]
+		splitPath "$i"
+		newfile="$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g')"
+		array[-1]=$newfile;
+		newPath="";
+		for element in ${array[@]}
 		do
-			baseFileName="${newfile%.*}"
-			fileExtension="${newfile##*.}"
-			newfile="$baseFileName(copy$pos).$fileExtension"
+			newPath="$newPath/$element"
+		done
+		while [ -f "$newPath" ]
+		do
+			baseFileName="${newPath%.*}"
+			fileExtension="${newPath##*.}"
+			newPath="$baseFileName(copy$pos).$fileExtension"
 			(( pos++ ))
 		done
-		mv "$i" "$newfile"
+		mv "$i" "$newPath"
 		pos=1;
 	done
 
@@ -138,37 +144,49 @@ function reemplazoNoRecursivo() {
 }
 
 function reemplazoRecursivo() {
-	echo "Estoy en la funcion recursiva."
+	archivosModificados=`find "$miDirectorio" -type f -name '* *'| wc -l `
 
-	archivosModificados=`find $miDirectorio -type f -name '* *'| wc -l `
-	archivosConEspacio=`find $miDirectorio -type f -name '* *'`;
+	IFS=$'\n'
+	arrayR=`find "$miDirectorio" -type d -print`
 
-	# IFS=$'\n'
-	# pos=1;
-	# for i in ${archivosConEspacio[@]}
-	# do	
-	# 	newfile="$(echo ${i} | sed -r  's/[[:space:]]+/_/g')" 
-	# 	while [ -f $newfile ]
-	# 	do
-	# 		baseFileName="${newfile%.*}"
-	# 		fileExtension="${newfile##*.}"
-	# 		newfile="$baseFileName(copy$pos).$fileExtension"
-	# 		(( pos++ ))
-	# 	done
-	# 	mv $i $newfile
-	# 	pos=1;
-	# done
+	for element in ${arrayR[@]}
+		do
+			archivosConEspacio=`find "$element" -maxdepth 1 -type f -name '* *'`;
 
+			IFS=$'\n'
+			pos=1;
+			for i in ${archivosConEspacio[@]}
+			do	
+				# Hago split del PATH por si algun directorio tiene espacios
+				splitPath "$i"
+				newfile="$(echo ${array[-1]} | sed -r  's/[[:space:]]+/_/g')"
+				array[-1]=$newfile;
+				newPath="";
+				for element in ${array[@]}
+				do
+					newPath="$newPath/$element"
+				done
+				while [ -f "$newPath" ]
+				do
+					baseFileName="${newPath%.*}"
+					fileExtension="${newPath##*.}"
+					newPath="$baseFileName(copy$pos).$fileExtension"
+					(( pos++ ))
+				done
+				mv "$i" "$newPath"
+				pos=1;
+			done
+		done
 
-	echo "Archivos modificados= $archivosModificados"
+	echo "Archivos modificados: $archivosModificados"
 }
 
 function init() {
 	if [ $esRecursivo == "true" ]
 	then
-		reemplazoRecursivo
+		reemplazoRecursivo 
 	else
-		reemplazoNoRecursivo
+		reemplazoNoRecursivo "$miDirectorio"
 	fi
 }
 	
