@@ -1,6 +1,6 @@
 BEGIN{cantLineas=0;
 }
-$0 != ""{
+NF{
     cantLineas++;
 }
 END{

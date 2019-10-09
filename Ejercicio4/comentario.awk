@@ -2,7 +2,7 @@ BEGIN{cantComentario=0;
 aperturaComentario=0;
 cierreComentario=0;
 }
-($1=="/*" && $NF=="*/") || ($1 ~ "\/\*" && $NF ~ "\*\/") || $0~"//" || ($0 ~ "\/\*" && $0 ~ "\*\/"){
+(($1=="/*" && $NF=="*/") || ($1 ~ "\/\*" && $NF ~ "\*\/") || $0~"//" || ($0 ~ "\/\*" && $0 ~ "\*\/")) && aperturaComentario == 0 && NF{
     cantComentario++;
 }
 $0 ~ "\/\*" && $0 !~ "\*\/"{
