@@ -9,7 +9,7 @@
 #         Handley, Tomas           39210894		#
 #         Imperatori, Nicolas      38622912		#
 #							                    #
-#		Instancia de Entrega: Rentrega 1	    #
+#		Instancia de Entrega: Rentrega 2	    #
 #							                    #
 #################################################
 
@@ -78,8 +78,14 @@ codigoTotales=$(find "$ruta" -type f -name "*$extension" | (while read archivo; 
 done 
 echo $codigo))
 
-porcentajeComentarios=$(echo "scale=2 ; ($comentariosTotales / $totalLineas)*100" | bc)
+if [ $totalLineas -gt 0 ]; then
+    porcentajeComentarios=$(echo "scale=2 ; ($comentariosTotales / $totalLineas)*100" | bc)
+    porcentajeCodigo=$(echo "scale=2 ; ($codigoTotales / $totalLineas)*100" | bc)
+else
+    porcentajeComentarios=0
+    porcentajeCodigo=0
+fi
+
 echo "Cantidad de lineas de comentarios totales: $comentariosTotales ($porcentajeComentarios %)"
 
-porcentajeCodigo=$(echo "scale=2 ; ($codigoTotales / $totalLineas)*100" | bc)
 echo "Cantidad de lineas de codigo totales: $codigoTotales ($porcentajeCodigo %)"
